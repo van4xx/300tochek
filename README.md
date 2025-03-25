@@ -1,46 +1,79 @@
-# Getting Started with Create React App
+# 300точек - Студия дизайна и печати
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Проект сайта-каталога для студии дизайна и печати "300точек", разработанный на React с использованием TypeScript.
 
-## Available Scripts
+## Описание проекта
 
-In the project directory, you can run:
+Сайт представляет собой каталог услуг и товаров студии дизайна и печати. Основной функционал включает:
 
-### `npm start`
+- Отображение категорий услуг
+- Просмотр товаров по категориям
+- Детальная информация о каждом товаре
+- Система цен в зависимости от тиража
+- Форма заказа и обратной связи
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Технологический стек
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- React
+- TypeScript
+- React Router для маршрутизации
+- Styled Components для стилизации
+- Axios для работы с API
 
-### `npm test`
+## Установка и запуск
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Клонировать репозиторий:
+```
+git clone <url-репозитория>
+```
 
-### `npm run build`
+2. Установить зависимости:
+```
+cd 300-tochek
+npm install
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. Запустить проект в режиме разработки:
+```
+npm start
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Сайт будет доступен по адресу [http://localhost:3000](http://localhost:3000)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Структура проекта
 
-### `npm run eject`
+```
+src/
+  |- api/          # API клиент и функции для работы с данными
+  |- assets/       # Статические файлы (изображения, иконки и т.д.)
+  |- components/   # Переиспользуемые компоненты
+  |- pages/        # Компоненты страниц
+  |- styles/       # Глобальные стили и темы
+  |- types/        # TypeScript типы и интерфейсы
+  |- App.tsx       # Корневой компонент с маршрутизацией
+  |- index.tsx     # Точка входа
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Основные функции
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Клиентская часть
+- Просмотр каталога товаров и услуг
+- Фильтрация товаров по категориям
+- Просмотр детальной информации о товаре
+- Выбор тиража и расчет цены
+- Отправка формы заказа
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Будущая административная часть
+- Управление категориями и товарами
+- Редактирование цен и описаний
+- Просмотр и управление заказами
+- Статистика продаж
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Планы по развитию
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. Разработка административной панели для управления контентом
+2. Интеграция с системами онлайн-оплаты
+3. Добавление личного кабинета пользователя
+4. Система учета и отслеживания заказов
+5. Интеграция с системами аналитики
+# 300tochek
