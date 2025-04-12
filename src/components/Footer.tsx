@@ -109,9 +109,9 @@ const Footer: React.FC = () => {
           <h3>О 300точек</h3>
           <p>Студия дизайна и печати "300точек" — ваш надежный партнер в создании качественной рекламной продукции и уникального дизайна.</p>
           <SocialLinks>
-            <a href="#" target="_blank" rel="noopener noreferrer">VK</a>
-            <a href="#" target="_blank" rel="noopener noreferrer">TG</a>
-            <a href="#" target="_blank" rel="noopener noreferrer">WA</a>
+            <a href="https://vk.com/example" target="_blank" rel="noopener noreferrer">VK</a>
+            <a href="https://t.me/example" target="_blank" rel="noopener noreferrer">TG</a>
+            <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer">WA</a>
           </SocialLinks>
         </FooterSection>
         

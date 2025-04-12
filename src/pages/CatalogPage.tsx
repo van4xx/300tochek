@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { getCategories, getCategoriesByType } from '../api';
+import { getCategoriesByType } from '../api';
 import { Category } from '../types';
 import CategoryCard from '../components/CategoryCard';
 
