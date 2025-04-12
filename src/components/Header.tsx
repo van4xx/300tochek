@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
+import SearchBar from './SearchBar';
 
 const HeaderContainer = styled.header`
   background-color: var(--white);
@@ -38,14 +39,28 @@ const Logo = styled(Link)`
   }
 `;
 
-const Nav = styled.nav<{ isOpen: boolean }>`
+const NavAndSearchWrapper = styled.div<{ isOpen: boolean }>`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-left: auto;
+
+  @media (max-width: 992px) {
+    flex-direction: column;
+    width: 100%;
+    align-items: flex-start;
+    margin-left: 0;
+    display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};
+  }
+`;
+
+const Nav = styled.nav`
   display: flex;
   align-items: center;
   
   @media (max-width: 992px) {
     flex-direction: column;
     width: 100%;
-    display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};
     margin-top: 1rem;
     align-items: flex-start;
   }
@@ -289,57 +304,60 @@ const Header: React.FC = () => {
           {isMenuOpen ? '✕' : '☰'}
         </MenuButton>
         
-        <Nav isOpen={isMenuOpen}>
-          <NavItem>
-            <NavLinkBase to="/" className={location.pathname === '/' ? 'active' : ''}>
-              Главная
-            </NavLinkBase>
-          </NavItem>
-          
-          <NavItem ref={printMenuRef}>
-            <DropdownButton onClick={togglePrintMenu} className={isPrintMenuOpen ? 'open' : ''}>
-              Печать
-            </DropdownButton>
-            <DropdownMenu isOpen={isPrintMenuOpen}>
-              {printCategories.map((cat) => (
-                <DropdownItem key={cat.name} to={cat.path}>
-                  {cat.name}
-                </DropdownItem>
-              ))}
-            </DropdownMenu>
-          </NavItem>
-          
-          <NavItem ref={designMenuRef}>
-            <DropdownButton onClick={toggleDesignMenu} className={isDesignMenuOpen ? 'open' : ''}>
-              Дизайн
-            </DropdownButton>
-            <DropdownMenu isOpen={isDesignMenuOpen}>
-              {designCategories.map((cat) => (
-                <DropdownItem key={cat.name} to={cat.path}>
-                  {cat.name}
-                </DropdownItem>
-              ))}
-            </DropdownMenu>
-          </NavItem>
-          
-          <NavItem>
-            <NavLinkBase to="/catalog" className={location.pathname === '/catalog' ? 'active' : ''}>
-              Каталог
-            </NavLinkBase>
-          </NavItem>
-          
-          <NavItem>
-            <NavLinkBase to="/about" className={location.pathname === '/about' ? 'active' : ''}>
-              О нас
-            </NavLinkBase>
-          </NavItem>
-          
-          <NavItem>
-            <NavLinkBase to="/contacts" className={location.pathname === '/contacts' ? 'active' : ''}>
-              Контакты
-            </NavLinkBase>
-          </NavItem>
-        </Nav>
+        <NavAndSearchWrapper isOpen={isMenuOpen}>
+          <Nav>
+            <NavItem>
+              <NavLinkBase to="/" className={location.pathname === '/' ? 'active' : ''}>
+                Главная
+              </NavLinkBase>
+            </NavItem>
+            
+            <NavItem ref={printMenuRef}>
+              <DropdownButton onClick={togglePrintMenu} className={isPrintMenuOpen ? 'open' : ''}>
+                Печать
+              </DropdownButton>
+              <DropdownMenu isOpen={isPrintMenuOpen}>
+                {printCategories.map((cat) => (
+                  <DropdownItem key={cat.name} to={cat.path}>
+                    {cat.name}
+                  </DropdownItem>
+                ))}
+              </DropdownMenu>
+            </NavItem>
+            
+            <NavItem ref={designMenuRef}>
+              <DropdownButton onClick={toggleDesignMenu} className={isDesignMenuOpen ? 'open' : ''}>
+                Дизайн
+              </DropdownButton>
+              <DropdownMenu isOpen={isDesignMenuOpen}>
+                {designCategories.map((cat) => (
+                  <DropdownItem key={cat.name} to={cat.path}>
+                    {cat.name}
+                  </DropdownItem>
+                ))}
+              </DropdownMenu>
+            </NavItem>
+            
+            <NavItem>
+              <NavLinkBase to="/catalog" className={location.pathname === '/catalog' ? 'active' : ''}>
+                Каталог
+              </NavLinkBase>
+            </NavItem>
+            
+            <NavItem>
+              <NavLinkBase to="/about" className={location.pathname === '/about' ? 'active' : ''}>
+                О нас
+              </NavLinkBase>
+            </NavItem>
+            
+            <NavItem>
+              <NavLinkBase to="/contacts" className={location.pathname === '/contacts' ? 'active' : ''}>
+                Контакты
+              </NavLinkBase>
+            </NavItem>
+          </Nav>
+          <SearchBar />
+        </NavAndSearchWrapper>
       </HeaderContent>
     </HeaderContainer>
   );

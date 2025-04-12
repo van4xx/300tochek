@@ -5,8 +5,8 @@ import styled from 'styled-components';
 const FooterContainer = styled.footer`
   background-color: var(--primary-color);
   color: var(--white);
-  padding: 2rem 0;
-  margin-top: 2rem;
+  padding: 3rem 0 2rem;
+  margin-top: 4rem;
 `;
 
 const FooterContent = styled.div`
@@ -14,23 +14,16 @@ const FooterContent = styled.div`
   margin: 0 auto;
   padding: 0 1rem;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
-  
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  @media (max-width: 480px) {
-    grid-template-columns: 1fr;
-  }
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2.5rem;
 `;
 
 const FooterSection = styled.div`
   h3 {
     font-size: 1.2rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     position: relative;
+    color: var(--accent-color);
     
     &:after {
       content: '';
@@ -38,55 +31,72 @@ const FooterSection = styled.div`
       width: 50px;
       height: 2px;
       background-color: var(--secondary-color);
-      bottom: -5px;
+      bottom: -8px;
       left: 0;
     }
+  }
+  
+  p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    line-height: 1.7;
   }
 `;
 
 const FooterLink = styled(Link)`
-  color: var(--white);
+  color: rgba(255, 255, 255, 0.8);
   display: block;
-  margin-bottom: 0.5rem;
-  transition: color 0.3s ease;
+  margin-bottom: 0.75rem;
+  transition: var(--transition);
+  font-size: 0.95rem;
   
   &:hover {
     color: var(--accent-color);
+    padding-left: 5px;
   }
 `;
 
 const ContactItem = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
   
-  svg {
-    margin-right: 0.5rem;
+  svg, span {
+    margin-right: 0.8rem;
+    color: var(--secondary-color);
+    font-size: 1.1rem;
+    width: 20px; // Для выравнивания иконок
+    text-align: center;
   }
 `;
 
 const Copyright = styled.div`
   text-align: center;
-  padding-top: 2rem;
-  margin-top: 2rem;
+  padding-top: 3rem;
+  margin-top: 3rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
 `;
 
 const SocialLinks = styled.div`
   display: flex;
   gap: 1rem;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
   
   a {
     color: var(--white);
     font-size: 1.5rem;
-    transition: color 0.3s ease;
+    transition: var(--transition);
     
     &:hover {
       color: var(--accent-color);
+      transform: scale(1.1);
     }
   }
 `;
@@ -96,29 +106,28 @@ const Footer: React.FC = () => {
     <FooterContainer>
       <FooterContent>
         <FooterSection>
-          <h3>О компании</h3>
-          <p>Студия дизайна и печати "300точек" предлагает широкий спектр услуг по разработке дизайна и печати рекламной продукции.</p>
+          <h3>О 300точек</h3>
+          <p>Студия дизайна и печати "300точек" — ваш надежный партнер в создании качественной рекламной продукции и уникального дизайна.</p>
           <SocialLinks>
-            <a href="https://vk.com" target="_blank" rel="noopener noreferrer">VK</a>
-            <a href="https://telegram.org" target="_blank" rel="noopener noreferrer">TG</a>
-            <a href="https://whatsapp.com" target="_blank" rel="noopener noreferrer">WA</a>
+            <a href="#" target="_blank" rel="noopener noreferrer">VK</a>
+            <a href="#" target="_blank" rel="noopener noreferrer">TG</a>
+            <a href="#" target="_blank" rel="noopener noreferrer">WA</a>
           </SocialLinks>
         </FooterSection>
         
         <FooterSection>
-          <h3>Разделы</h3>
+          <h3>Навигация</h3>
           <FooterLink to="/">Главная</FooterLink>
           <FooterLink to="/catalog">Каталог</FooterLink>
           <FooterLink to="/about">О нас</FooterLink>
           <FooterLink to="/contacts">Контакты</FooterLink>
+          <FooterLink to="/faq">FAQ</FooterLink>
         </FooterSection>
         
         <FooterSection>
-          <h3>Услуги</h3>
-          <FooterLink to="/catalog/visitki">Визитки</FooterLink>
-          <FooterLink to="/catalog/listovki">Листовки</FooterLink>
-          <FooterLink to="/catalog/bannery">Баннеры</FooterLink>
-          <FooterLink to="/catalog/broshyury">Брошюры</FooterLink>
+          <h3>Полезная информация</h3>
+          <FooterLink to="/shipping-payment">Доставка и оплата</FooterLink>
+          <FooterLink to="/privacy-policy">Политика конфиденциальности</FooterLink>
         </FooterSection>
         
         <FooterSection>
@@ -133,7 +142,7 @@ const Footer: React.FC = () => {
             <span>🏠</span> г. Москва, ул. Примерная, д. 123
           </ContactItem>
           <ContactItem>
-            <span>🕒</span> Пн-Пт: 9:00 - 18:00
+            <span>🕒</span> Пн-Пт: 9:00 - 18:00, Сб: 10:00 - 16:00
           </ContactItem>
         </FooterSection>
       </FooterContent>

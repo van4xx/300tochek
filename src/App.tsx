@@ -10,6 +10,11 @@ import ProductPage from './pages/ProductPage';
 import OrderPage from './pages/OrderPage';
 import AboutPage from './pages/AboutPage';
 import ContactsPage from './pages/ContactsPage';
+import ShippingPaymentPage from './pages/ShippingPaymentPage';
+import FaqPage from './pages/FaqPage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import NotFoundPage from './pages/NotFoundPage';
+import SearchResultsPage from './pages/SearchResultsPage';
 
 const App: React.FC = () => {
   return (
@@ -25,6 +30,11 @@ const App: React.FC = () => {
           <Route path="/order/:productId" element={<OrderPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contacts" element={<ContactsPage />} />
+          <Route path="/shipping-payment" element={<ShippingPaymentPage />} />
+          <Route path="/faq" element={<FaqPage />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+          <Route path="/search" element={<SearchResultsPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
       <Footer />

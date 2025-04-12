@@ -14,10 +14,12 @@ const Breadcrumbs = styled.div`
   display: flex;
   align-items: center;
   font-size: 0.9rem;
+  color: var(--dark-gray);
 `;
 
 const BreadcrumbLink = styled(Link)`
   color: var(--dark-gray);
+  text-decoration: none;
   
   &:hover {
     color: var(--primary-color);
@@ -26,7 +28,6 @@ const BreadcrumbLink = styled(Link)`
 
 const BreadcrumbSeparator = styled.span`
   margin: 0 0.5rem;
-  color: var(--dark-gray);
 `;
 
 const BreadcrumbCurrent = styled.span`
@@ -36,97 +37,124 @@ const BreadcrumbCurrent = styled.span`
 
 const ProductContainer = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1.2fr;
   gap: 3rem;
   margin-bottom: 3rem;
+  background-color: var(--white);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
   
-  @media (max-width: 768px) {
+  @media (max-width: 992px) {
     grid-template-columns: 1fr;
   }
 `;
 
 const ImageContainer = styled.div`
-  background-color: var(--white);
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  height: 400px;
+  height: auto;
+  max-height: 500px;
 `;
 
-const Image = styled.div<{ imageUrl: string }>`
+const Image = styled.img`
+  display: block;
   width: 100%;
   height: 100%;
-  background-image: url(${props => props.imageUrl || '/images/placeholder.jpg'});
-  background-size: cover;
-  background-position: center;
+  object-fit: cover;
 `;
 
-const ProductInfo = styled.div``;
+const ProductInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 const Title = styled.h1`
-  font-size: 2rem;
+  font-size: 2.2rem;
   margin-bottom: 1rem;
-  color: var(--text-color);
+  color: var(--primary-color);
+  line-height: 1.3;
 `;
 
 const Description = styled.p`
   color: var(--dark-gray);
-  font-size: 1.1rem;
-  line-height: 1.6;
+  font-size: 1.05rem;
+  line-height: 1.7;
   margin-bottom: 2rem;
+  flex-grow: 1;
 `;
 
 const PriceContainer = styled.div`
-  margin-bottom: 2rem;
+  margin-top: 2rem;
 `;
 
 const PriceTitle = styled.h3`
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   margin-bottom: 1rem;
+  color: var(--text-color);
 `;
 
 const PriceTable = styled.table`
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 2rem;
+  font-size: 0.95rem;
 `;
 
 const PriceTableHead = styled.thead`
-  background-color: var(--primary-color);
-  color: var(--white);
-  
   th {
-    padding: 1rem;
+    padding: 0.8rem 1rem;
     text-align: left;
+    background-color: var(--light-gray);
+    color: var(--dark-gray);
+    font-weight: 500;
   }
 `;
 
 const PriceTableBody = styled.tbody`
   tr {
     &:nth-child(odd) {
-      background-color: var(--light-gray);
+      background-color: rgba(0, 86, 163, 0.05);
+    }
+    &:hover {
+      background-color: rgba(0, 86, 163, 0.1);
     }
   }
   
   td {
-    padding: 1rem;
+    padding: 0.8rem 1rem;
     border-bottom: 1px solid var(--light-gray);
+    
+    &:last-child {
+      font-weight: 700;
+      color: var(--secondary-color);
+    }
   }
+`;
+
+const OrderButtonContainer = styled.div`
+  margin-top: 1rem;
 `;
 
 const OrderButton = styled(Link)`
   display: inline-block;
   background-color: var(--secondary-color);
   color: var(--white);
-  padding: 0.75rem 2rem;
-  border-radius: 4px;
+  padding: 0.8rem 2.5rem;
+  border-radius: 50px;
   font-size: 1.1rem;
   font-weight: 500;
   text-align: center;
-  transition: background-color 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: var(--transition);
+  text-decoration: none;
   
   &:hover {
-    background-color: rgba(255, 107, 0, 0.8);
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+    box-shadow: var(--shadow);
+    transform: translateY(-2px);
   }
 `;
 
@@ -149,24 +177,33 @@ const ErrorMessage = styled.div`
 const FormSection = styled.section`
   margin-top: 4rem;
   margin-bottom: 4rem;
+  background-color: var(--white);
+  padding: 2.5rem;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
 `;
 
 const FormTitle = styled.h2`
   font-size: 1.8rem;
   margin-bottom: 2rem;
   text-align: center;
+  color: var(--primary-color);
 `;
 
 const ProductPage: React.FC = () => {
   const { productId } = useParams<Record<string, string | undefined>>();
   const [product, setProduct] = useState<Product | null>(null);
-  const [selectedQuantity, setSelectedQuantity] = useState<string>('');
+  const [selectedQuantityForOrder, setSelectedQuantityForOrder] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
   useEffect(() => {
     const fetchProduct = async () => {
-      if (!productId) return;
+      if (!productId) {
+         setError('Не указан ID товара.');
+         setIsLoading(false);
+         return;
+      }
       
       try {
         setIsLoading(true);
@@ -176,7 +213,8 @@ const ProductPage: React.FC = () => {
         
         if (productData) {
           setProduct(productData);
-          setSelectedQuantity(Object.keys(productData.price)[0]);
+          const firstQuantity = Object.keys(productData.price)[0];
+          setSelectedQuantityForOrder(firstQuantity || '');
         } else {
           setError('Товар не найден.');
         }
@@ -207,7 +245,7 @@ const ProductPage: React.FC = () => {
           <BreadcrumbSeparator>/</BreadcrumbSeparator>
           <BreadcrumbLink to="/catalog">Каталог</BreadcrumbLink>
           <BreadcrumbSeparator>/</BreadcrumbSeparator>
-          <BreadcrumbLink to={`/catalog/${product.category.toLowerCase()}`}>
+          <BreadcrumbLink to={`/catalog/${product.category.toLowerCase().replace(/ /g, '-')}`}>
             {product.category}
           </BreadcrumbLink>
           <BreadcrumbSeparator>/</BreadcrumbSeparator>
@@ -216,7 +254,7 @@ const ProductPage: React.FC = () => {
         
         <ProductContainer>
           <ImageContainer>
-            <Image imageUrl={product.imageUrl} />
+            <Image src={product.imageUrl} alt={product.title} />
           </ImageContainer>
           
           <ProductInfo>
@@ -224,17 +262,20 @@ const ProductPage: React.FC = () => {
             <Description>{product.description}</Description>
             
             <PriceContainer>
-              <PriceTitle>Цены:</PriceTitle>
+              <PriceTitle>Цены и тиражи:</PriceTitle>
               <PriceTable>
                 <PriceTableHead>
                   <tr>
                     <th>Тираж</th>
-                    <th>Цена</th>
+                    <th>Цена за тираж</th>
                   </tr>
                 </PriceTableHead>
                 <PriceTableBody>
                   {Object.entries(product.price).map(([quantity, price]) => (
-                    <tr key={quantity}>
+                    <tr key={quantity} 
+                        onClick={() => setSelectedQuantityForOrder(quantity)} 
+                        style={{ cursor: 'pointer' }}
+                    >
                       <td>{quantity}</td>
                       <td>{price} ₽</td>
                     </tr>
@@ -242,16 +283,21 @@ const ProductPage: React.FC = () => {
                 </PriceTableBody>
               </PriceTable>
               
-              <OrderButton to={`/order/${product.id}?quantity=${selectedQuantity}`}>
-                Заказать
-              </OrderButton>
+              <OrderButtonContainer>
+                <OrderButton 
+                  to={`/order/${product.id}?quantity=${encodeURIComponent(selectedQuantityForOrder)}`}
+                  style={!selectedQuantityForOrder ? { pointerEvents: 'none', opacity: 0.5 } : {}}
+                >
+                  Заказать ({selectedQuantityForOrder || 'Выберите тираж'})
+                </OrderButton>
+              </OrderButtonContainer>
             </PriceContainer>
           </ProductInfo>
         </ProductContainer>
         
         <FormSection>
-          <FormTitle>Заказать {product.title}</FormTitle>
-          <ContactForm productId={product.id} defaultQuantity={selectedQuantity} />
+          <FormTitle>Оставить заявку на {product.title}</FormTitle>
+          <ContactForm productId={product.id} defaultQuantity={selectedQuantityForOrder} />
         </FormSection>
       </PageContainer>
     </div>
