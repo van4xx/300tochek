@@ -5,10 +5,6 @@ import { getProductsByCategory } from '../api';
 import { Product } from '../types';
 import ProductCard from '../components/ProductCard';
 
-interface CategoryPageParams {
-  categoryName: string;
-}
-
 const PageHeader = styled.div`
   background-color: var(--primary-color);
   color: var(--white);
@@ -46,21 +42,14 @@ const BreadcrumbSeparator = styled.span`
 const BreadcrumbCurrent = styled.span`
   color: var(--text-color);
   font-weight: 500;
+  text-transform: capitalize;
 `;
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
   margin-bottom: 3rem;
-  
-  @media (max-width: 992px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  @media (max-width: 576px) {
-    grid-template-columns: 1fr;
-  }
 `;
 
 const LoadingMessage = styled.div`
@@ -86,22 +75,26 @@ const EmptyMessage = styled.div`
 `;
 
 const CategoryPage: React.FC = () => {
-  const { categoryName } = useParams<CategoryPageParams>();
+  const { categoryName } = useParams<Record<string, string | undefined>>();
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
-  const categoryDisplayName = categoryName ? categoryName.charAt(0).toUpperCase() + categoryName.slice(1) : '';
+  const categoryDisplayName = categoryName ? categoryName.replace(/-/g, ' ') : '';
   
   useEffect(() => {
     const fetchProducts = async () => {
-      if (!categoryName) return;
+      if (!categoryName) {
+        setError('Категория не найдена.');
+        setIsLoading(false);
+        return;
+      }
       
       try {
         setIsLoading(true);
         setError(null);
         
-        const data = await getProductsByCategory(categoryDisplayName);
+        const data = await getProductsByCategory(categoryName);
         setProducts(data);
       } catch (err) {
         console.error('Ошибка при загрузке продуктов:', err);
@@ -112,7 +105,7 @@ const CategoryPage: React.FC = () => {
     };
     
     fetchProducts();
-  }, [categoryName, categoryDisplayName]);
+  }, [categoryName]);
   
   return (
     <div>

@@ -5,10 +5,6 @@ import { getProductById } from '../api';
 import { Product } from '../types';
 import ContactForm from '../components/ContactForm';
 
-interface ProductPageParams {
-  productId: string;
-}
-
 const PageContainer = styled.div`
   margin-top: 2rem;
 `;
@@ -162,7 +158,7 @@ const FormTitle = styled.h2`
 `;
 
 const ProductPage: React.FC = () => {
-  const { productId } = useParams<ProductPageParams>();
+  const { productId } = useParams<Record<string, string | undefined>>();
   const [product, setProduct] = useState<Product | null>(null);
   const [selectedQuantity, setSelectedQuantity] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);

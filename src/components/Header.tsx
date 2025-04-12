@@ -4,73 +4,50 @@ import styled from 'styled-components';
 
 const HeaderContainer = styled.header`
   background-color: var(--white);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
   z-index: 100;
-  transition: all var(--transition-normal) ease;
-
-  &:hover {
-    box-shadow: var(--shadow-lg);
-  }
 `;
 
 const HeaderContent = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.25rem var(--spacing-lg);
+  padding: 0.8rem 1rem;
   max-width: 1200px;
   margin: 0 auto;
 
-  @media (max-width: 768px) {
+  @media (max-width: 992px) {
     flex-direction: column;
     align-items: flex-start;
-    padding: 1rem var(--spacing-lg);
   }
 `;
 
 const Logo = styled(Link)`
   font-size: 1.8rem;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--primary-color);
   display: flex;
   align-items: center;
-  position: relative;
-  transition: transform var(--transition-normal) ease;
+  text-decoration: none;
   
   span {
     color: var(--secondary-color);
-    font-weight: 800;
-  }
-  
-  &:hover {
-    transform: scale(1.05);
-  }
-  
-  &:after {
-    content: '';
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    background-color: var(--accent-color);
-    border-radius: 50%;
-    bottom: 5px;
-    right: -10px;
+    margin-right: 5px;
   }
 `;
 
 const Nav = styled.nav<{ isOpen: boolean }>`
   display: flex;
+  align-items: center;
   
-  @media (max-width: 768px) {
+  @media (max-width: 992px) {
     flex-direction: column;
     width: 100%;
-    max-height: ${({ isOpen }) => (isOpen ? '1000px' : '0')};
-    opacity: ${({ isOpen }) => (isOpen ? '1' : '0')};
-    overflow: hidden;
-    margin-top: ${({ isOpen }) => (isOpen ? '1rem' : '0')};
-    transition: all var(--transition-normal) ease;
+    display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};
+    margin-top: 1rem;
+    align-items: flex-start;
   }
 `;
 
@@ -78,158 +55,135 @@ const NavItem = styled.div`
   position: relative;
   margin-left: 2rem;
   
-  @media (max-width: 768px) {
-    margin: 0.5rem 0;
-    padding: 0.5rem 0;
+  @media (max-width: 992px) {
+    margin: 0;
     width: 100%;
   }
 `;
 
-const NavLink = styled(Link)<{ isActive?: boolean }>`
-  color: ${props => props.isActive ? 'var(--primary-color)' : 'var(--text-color)'};
-  font-weight: 600;
-  position: relative;
-  padding: 0.5rem 0;
-  
-  &:after {
-    content: '';
-    position: absolute;
-    width: ${props => props.isActive ? '100%' : '0'};
-    height: 3px;
-    bottom: -5px;
-    left: 0;
-    background-color: var(--secondary-color);
-    transition: width var(--transition-normal) ease;
-    border-radius: 2px;
-  }
-  
-  &:hover {
-    color: var(--primary-color);
-    
-    &:after {
-      width: 100%;
-    }
-  }
-  
-  @media (max-width: 768px) {
-    display: block;
-    padding: 0.75rem 0;
-    border-bottom: 1px solid var(--light-gray);
-    width: 100%;
-    
-    &:after {
-      bottom: 0;
-    }
-  }
-`;
-
-const DropdownButton = styled.div<{ isOpen: boolean }>`
+const NavLinkBase = styled(Link)`
   color: var(--text-color);
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  padding: 0.5rem 0;
-  position: relative;
-  
-  &:after {
-    content: '';
-    display: inline-block;
-    margin-left: 0.5rem;
-    width: 0;
-    height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 5px solid var(--text-color);
-    transition: transform var(--transition-normal) ease;
-    transform: ${({ isOpen }) => (isOpen ? 'rotate(180deg)' : 'rotate(0)')};
-  }
-  
-  &:hover {
-    color: var(--primary-color);
-    
-    &:after {
-      border-top-color: var(--primary-color);
-    }
-  }
-  
-  @media (max-width: 768px) {
-    padding: 0.75rem 0;
-    border-bottom: 1px solid var(--light-gray);
-    width: 100%;
-  }
-`;
-
-const DropdownMenu = styled.div<{ isOpen: boolean }>`
-  position: absolute;
-  top: calc(100% + 5px);
-  left: -1rem;
-  background-color: var(--white);
-  border-radius: var(--border-radius-md);
-  box-shadow: var(--shadow-md);
-  width: 230px;
-  padding: ${({ isOpen }) => (isOpen ? '0.75rem 0' : '0')};
-  opacity: ${({ isOpen }) => (isOpen ? '1' : '0')};
-  visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
-  transform: ${({ isOpen }) => (isOpen ? 'translateY(0)' : 'translateY(-10px)')};
-  transition: all var(--transition-normal) ease;
-  z-index: 10;
-  overflow: hidden;
-  max-height: ${({ isOpen }) => (isOpen ? '500px' : '0')};
-  
-  &:before {
-    content: '';
-    position: absolute;
-    top: -5px;
-    left: 1.5rem;
-    width: 10px;
-    height: 10px;
-    background-color: var(--white);
-    transform: rotate(45deg);
-    border-radius: 2px;
-  }
-  
-  @media (max-width: 768px) {
-    position: static;
-    width: 100%;
-    box-shadow: none;
-    padding-left: 1rem;
-    border-radius: 0;
-    
-    &:before {
-      display: none;
-    }
-  }
-`;
-
-const DropdownItem = styled(Link)`
-  display: block;
-  padding: 0.75rem 1.25rem;
-  color: var(--text-color);
-  text-decoration: none;
-  transition: all var(--transition-normal) ease;
   font-weight: 500;
+  text-decoration: none;
+  padding: 0.5rem 0;
   position: relative;
-  
-  &:hover {
-    background-color: var(--background-dark);
-    color: var(--primary-color);
-    padding-left: 1.5rem;
-  }
+  transition: var(--transition);
   
   &:after {
     content: '';
     position: absolute;
     width: 0;
     height: 2px;
-    bottom: 5px;
-    left: 1.25rem;
+    bottom: -2px;
+    left: 0;
     background-color: var(--secondary-color);
-    transition: width var(--transition-normal) ease;
+    transition: var(--transition);
   }
   
-  &:hover:after {
-    width: 20px;
+  &:hover {
+    color: var(--secondary-color);
+  }
+
+  &:hover:after, &.active:after {
+    width: 100%;
+  }
+  
+  @media (max-width: 992px) {
+    display: block;
+    padding: 0.8rem 0;
+    width: 100%;
+    border-bottom: 1px solid var(--light-gray);
+    
+    &:after {
+      display: none;
+    }
+  }
+`;
+
+const DropdownButton = styled.div`
+  color: var(--text-color);
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0;
+  transition: var(--transition);
+  
+  &:after {
+    content: '▼';
+    font-size: 0.6rem;
+    margin-left: 0.5rem;
+    transition: var(--transition);
+  }
+  
+  &:hover {
+    color: var(--secondary-color);
+  }
+  
+  &.open:after {
+    transform: rotate(180deg);
+  }
+  
+  @media (max-width: 992px) {
+    padding: 0.8rem 0;
+    width: 100%;
+    border-bottom: 1px solid var(--light-gray);
+    justify-content: space-between;
+  }
+`;
+
+const DropdownMenu = styled.div<{ isOpen: boolean }>`
+  position: absolute;
+  top: calc(100% + 10px);
+  left: -10px;
+  background-color: var(--white);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  min-width: 220px;
+  padding: 0.5rem 0;
+  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
+  visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
+  transform: ${({ isOpen }) => (isOpen ? 'translateY(0)' : 'translateY(10px)')};
+  transition: var(--transition);
+  z-index: 10;
+  
+  @media (max-width: 992px) {
+    position: static;
+    width: 100%;
+    box-shadow: none;
+    margin-left: 1rem;
+    border: none;
+    padding: 0;
+    background-color: transparent;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    max-height: ${({ isOpen }) => (isOpen ? '500px' : '0')};
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+  }
+`;
+
+const DropdownItem = styled(Link)`
+  display: block;
+  padding: 0.75rem 1.5rem;
+  color: var(--text-color);
+  text-decoration: none;
+  transition: var(--transition);
+  font-size: 0.95rem;
+  
+  &:hover {
+    background-color: var(--light-gray);
+    color: var(--primary-color);
+  }
+  
+  @media (max-width: 992px) {
+    padding: 0.8rem 0 0.8rem 1rem;
+    border-bottom: 1px solid var(--light-gray);
+    
+    &:last-child {
+      border-bottom: none;
+    }
   }
 `;
 
@@ -237,26 +191,36 @@ const MenuButton = styled.button`
   display: none;
   background: none;
   border: none;
-  color: var(--primary-color);
-  font-size: 1.5rem;
+  color: var(--text-color);
+  font-size: 1.8rem;
   cursor: pointer;
-  padding: 0.5rem;
-  border-radius: var(--border-radius-sm);
-  transition: all var(--transition-normal) ease;
+  padding: 0;
   
-  &:hover {
-    background-color: var(--background-dark);
-    transform: none;
-    box-shadow: none;
-  }
-  
-  @media (max-width: 768px) {
+  @media (max-width: 992px) {
     display: block;
     position: absolute;
     top: 1rem;
     right: 1rem;
   }
 `;
+
+// Категории для выпадающих меню
+const printCategories = [
+  { name: 'Полиграфия', path: '/catalog/poligrafia' },
+  { name: 'Наклейки', path: '/catalog/nakleiki' },
+  { name: 'Маркетплейсы', path: '/catalog/marketpleisy' },
+  { name: 'Наружная реклама', path: '/catalog/naruzhnaya-reklama' },
+  { name: 'Упаковка', path: '/catalog/upakovka' },
+  { name: 'Аксессуары', path: '/catalog/aksessuary' },
+];
+
+const designCategories = [
+  { name: 'Фирменный стиль', path: '/catalog/firmennyj-stil' },
+  { name: 'Веб-дизайн', path: '/catalog/web-dizajn' },
+  { name: 'Иллюстрации', path: '/catalog/illyustracii' },
+  { name: 'Дизайн упаковки', path: '/catalog/dizajn-upakovki' },
+  { name: 'Брендирование', path: '/catalog/brendirovanie' },
+];
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -265,11 +229,21 @@ const Header: React.FC = () => {
   
   const printMenuRef = useRef<HTMLDivElement>(null);
   const designMenuRef = useRef<HTMLDivElement>(null);
-  
   const location = useLocation();
+
+  const closeAllMenus = () => {
+    setIsMenuOpen(false);
+    setIsPrintMenuOpen(false);
+    setIsDesignMenuOpen(false);
+  }
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+    // Закрываем остальные меню при открытии/закрытии основного меню на мобильных
+    if (window.innerWidth <= 992) {
+      setIsPrintMenuOpen(false);
+      setIsDesignMenuOpen(false);
+    }
   };
   
   const togglePrintMenu = () => {
@@ -288,7 +262,6 @@ const Header: React.FC = () => {
       if (printMenuRef.current && !printMenuRef.current.contains(event.target as Node)) {
         setIsPrintMenuOpen(false);
       }
-      
       if (designMenuRef.current && !designMenuRef.current.contains(event.target as Node)) {
         setIsDesignMenuOpen(false);
       }
@@ -300,11 +273,9 @@ const Header: React.FC = () => {
     };
   }, []);
   
-  // Закрытие мобильного меню при переходе по ссылке
+  // Закрытие меню при смене роута
   useEffect(() => {
-    setIsMenuOpen(false);
-    setIsPrintMenuOpen(false);
-    setIsDesignMenuOpen(false);
+    closeAllMenus();
   }, [location]);
 
   return (
@@ -320,54 +291,53 @@ const Header: React.FC = () => {
         
         <Nav isOpen={isMenuOpen}>
           <NavItem>
-            <NavLink to="/" isActive={location.pathname === '/'}>
+            <NavLinkBase to="/" className={location.pathname === '/' ? 'active' : ''}>
               Главная
-            </NavLink>
+            </NavLinkBase>
           </NavItem>
           
           <NavItem ref={printMenuRef}>
-            <DropdownButton onClick={togglePrintMenu} isOpen={isPrintMenuOpen}>
+            <DropdownButton onClick={togglePrintMenu} className={isPrintMenuOpen ? 'open' : ''}>
               Печать
             </DropdownButton>
             <DropdownMenu isOpen={isPrintMenuOpen}>
-              <DropdownItem to="/catalog/poligrafia">Полиграфия</DropdownItem>
-              <DropdownItem to="/catalog/nakleiki">Наклейки</DropdownItem>
-              <DropdownItem to="/catalog/marketpleisy">Маркетплейсы</DropdownItem>
-              <DropdownItem to="/catalog/naruzhnaya-reklama">Наружная реклама</DropdownItem>
-              <DropdownItem to="/catalog/upakovka">Упаковка</DropdownItem>
-              <DropdownItem to="/catalog/aksessuary">Аксессуары</DropdownItem>
+              {printCategories.map((cat) => (
+                <DropdownItem key={cat.name} to={cat.path}>
+                  {cat.name}
+                </DropdownItem>
+              ))}
             </DropdownMenu>
           </NavItem>
           
           <NavItem ref={designMenuRef}>
-            <DropdownButton onClick={toggleDesignMenu} isOpen={isDesignMenuOpen}>
+            <DropdownButton onClick={toggleDesignMenu} className={isDesignMenuOpen ? 'open' : ''}>
               Дизайн
             </DropdownButton>
             <DropdownMenu isOpen={isDesignMenuOpen}>
-              <DropdownItem to="/catalog/firmennyj-stil">Фирменный стиль</DropdownItem>
-              <DropdownItem to="/catalog/web-dizajn">Веб-дизайн</DropdownItem>
-              <DropdownItem to="/catalog/illyustracii">Иллюстрации</DropdownItem>
-              <DropdownItem to="/catalog/dizajn-upakovki">Дизайн упаковки</DropdownItem>
-              <DropdownItem to="/catalog/brendirovanie">Брендирование</DropdownItem>
+              {designCategories.map((cat) => (
+                <DropdownItem key={cat.name} to={cat.path}>
+                  {cat.name}
+                </DropdownItem>
+              ))}
             </DropdownMenu>
           </NavItem>
           
           <NavItem>
-            <NavLink to="/catalog" isActive={location.pathname === '/catalog'}>
+            <NavLinkBase to="/catalog" className={location.pathname === '/catalog' ? 'active' : ''}>
               Каталог
-            </NavLink>
+            </NavLinkBase>
           </NavItem>
           
           <NavItem>
-            <NavLink to="/about" isActive={location.pathname === '/about'}>
+            <NavLinkBase to="/about" className={location.pathname === '/about' ? 'active' : ''}>
               О нас
-            </NavLink>
+            </NavLinkBase>
           </NavItem>
           
           <NavItem>
-            <NavLink to="/contacts" isActive={location.pathname === '/contacts'}>
+            <NavLinkBase to="/contacts" className={location.pathname === '/contacts' ? 'active' : ''}>
               Контакты
-            </NavLink>
+            </NavLinkBase>
           </NavItem>
         </Nav>
       </HeaderContent>

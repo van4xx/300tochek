@@ -55,7 +55,7 @@ const AboutContent = styled.div`
 const AboutImage = styled.div`
   height: 400px;
   background-color: var(--light-gray);
-  background-image: url('/images/about/about-company.jpg');
+  background-image: url('https://placehold.co/800x600/cccccc/cccccc?text=About+Company');
   background-size: cover;
   background-position: center;
   border-radius: 8px;
@@ -146,10 +146,11 @@ const TeamMember = styled.div`
   text-align: center;
 `;
 
-const MemberPhoto = styled.div`
+const MemberPhoto = styled.div<{ imageUrl: string }>`
   width: 100%;
   height: 250px;
   background-color: var(--light-gray);
+  background-image: url(${props => props.imageUrl});
   background-size: cover;
   background-position: center;
   border-radius: 8px;
@@ -262,25 +263,25 @@ const AboutPage: React.FC = () => {
           <SectionTitle>Наша команда</SectionTitle>
           <TeamGrid>
             <TeamMember>
-              <MemberPhoto style={{ backgroundImage: 'url("/images/team/person1.jpg")' }} />
+              <MemberPhoto imageUrl="https://placehold.co/400x500/cccccc/cccccc?text=Team+1" />
               <MemberName>Иванов Иван</MemberName>
               <MemberPosition>Генеральный директор</MemberPosition>
             </TeamMember>
             
             <TeamMember>
-              <MemberPhoto style={{ backgroundImage: 'url("/images/team/person2.jpg")' }} />
+              <MemberPhoto imageUrl="https://placehold.co/400x500/cccccc/cccccc?text=Team+2" />
               <MemberName>Петрова Елена</MemberName>
               <MemberPosition>Арт-директор</MemberPosition>
             </TeamMember>
             
             <TeamMember>
-              <MemberPhoto style={{ backgroundImage: 'url("/images/team/person3.jpg")' }} />
+              <MemberPhoto imageUrl="https://placehold.co/400x500/cccccc/cccccc?text=Team+3" />
               <MemberName>Сидоров Алексей</MemberName>
               <MemberPosition>Ведущий дизайнер</MemberPosition>
             </TeamMember>
             
             <TeamMember>
-              <MemberPhoto style={{ backgroundImage: 'url("/images/team/person4.jpg")' }} />
+              <MemberPhoto imageUrl="https://placehold.co/400x500/cccccc/cccccc?text=Team+4" />
               <MemberName>Козлова Мария</MemberName>
               <MemberPosition>Менеджер проектов</MemberPosition>
             </TeamMember>

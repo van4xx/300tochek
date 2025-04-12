@@ -12,31 +12,21 @@ const Card = styled(Link)`
   background-color: var(--white);
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  transition: var(--transition);
   height: 100%;
+  text-decoration: none;
   
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    transform: translateY(-8px);
+    box-shadow: var(--shadow);
   }
 `;
 
 const ImageContainer = styled.div`
-  height: 200px;
+  height: 180px;
   overflow: hidden;
   position: relative;
-  
-  &:before {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 50%;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
-    z-index: 1;
-  }
 `;
 
 const Image = styled.div<{ imageUrl: string }>`
@@ -48,7 +38,7 @@ const Image = styled.div<{ imageUrl: string }>`
   transition: transform 0.5s ease;
   
   ${Card}:hover & {
-    transform: scale(1.05);
+    transform: scale(1.1);
   }
 `;
 
@@ -57,20 +47,21 @@ const Content = styled.div`
 `;
 
 const Title = styled.h3`
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   margin-bottom: 0.5rem;
-  color: var(--text-color);
+  color: var(--primary-color);
+  line-height: 1.4;
 `;
 
 const Description = styled.p`
   color: var(--dark-gray);
   font-size: 0.9rem;
-  line-height: 1.5;
+  line-height: 1.6;
 `;
 
 const CategoryCard: React.FC<CategoryCardProps> = ({ category }) => {
   return (
-    <Card to={`/catalog/${category.name.toLowerCase()}`}>
+    <Card to={`/catalog/${category.name.toLowerCase().replace(' ', '-')}`}>
       <ImageContainer>
         <Image imageUrl={category.imageUrl} />
       </ImageContainer>

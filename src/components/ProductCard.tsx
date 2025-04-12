@@ -11,20 +11,20 @@ const Card = styled.div`
   background-color: var(--white);
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  transition: var(--transition);
   display: flex;
   flex-direction: column;
   height: 100%;
   
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    transform: translateY(-8px);
+    box-shadow: var(--shadow);
   }
 `;
 
 const ImageContainer = styled.div`
-  height: 200px;
+  height: 220px;
   overflow: hidden;
 `;
 
@@ -37,7 +37,7 @@ const Image = styled.div<{ imageUrl: string }>`
   transition: transform 0.5s ease;
   
   ${Card}:hover & {
-    transform: scale(1.05);
+    transform: scale(1.1);
   }
 `;
 
@@ -49,16 +49,17 @@ const Content = styled.div`
 `;
 
 const Title = styled.h3`
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
-  color: var(--text-color);
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+  color: var(--primary-color);
+  line-height: 1.4;
 `;
 
 const Description = styled.p`
   color: var(--dark-gray);
   font-size: 0.9rem;
-  line-height: 1.5;
-  margin-bottom: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
 `;
 
 const PriceContainer = styled.div`
@@ -67,40 +68,45 @@ const PriceContainer = styled.div`
 
 const PriceSelect = styled.select`
   width: 100%;
-  padding: 0.5rem;
+  padding: 0.75rem;
   margin-bottom: 1rem;
   border: 1px solid var(--light-gray);
   border-radius: 4px;
   font-size: 0.9rem;
+  background-color: var(--white);
 `;
 
 const Price = styled.div`
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-weight: 700;
-  color: var(--primary-color);
-  margin-bottom: 1rem;
+  color: var(--secondary-color);
+  margin-bottom: 1.5rem;
 `;
 
 const ButtonContainer = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 1rem;
 `;
 
 const Button = styled(Link)`
-  flex: 1;
   background-color: var(--primary-color);
   color: var(--white);
   border: none;
   padding: 0.75rem;
-  border-radius: 4px;
+  border-radius: 50px;
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
   text-align: center;
-  transition: background-color 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: var(--transition);
   
   &:hover {
-    background-color: rgba(0, 86, 163, 0.8);
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   }
   
   &.secondary {
@@ -109,7 +115,10 @@ const Button = styled(Link)`
     color: var(--primary-color);
     
     &:hover {
-      background-color: rgba(0, 86, 163, 0.1);
+      background-color: var(--primary-color);
+      color: var(--white);
+      transform: translateY(-2px);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
   }
 `;
@@ -144,7 +153,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <Button to={`/products/${product.id}`} className="secondary">
             Подробнее
           </Button>
-          <Button to={`/order/${product.id}?quantity=${selectedQuantity}`}>
+          <Button to={`/order/${product.id}?quantity=${encodeURIComponent(selectedQuantity)}`}>
             Заказать
           </Button>
         </ButtonContainer>

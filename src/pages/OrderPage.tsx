@@ -5,10 +5,6 @@ import { getProductById } from '../api';
 import { Product } from '../types';
 import ContactForm from '../components/ContactForm';
 
-interface OrderPageParams {
-  productId: string;
-}
-
 const PageContainer = styled.div`
   margin-top: 2rem;
   margin-bottom: 4rem;
@@ -25,13 +21,14 @@ const PageHeader = styled.div`
 const Title = styled.h1`
   font-size: 2.5rem;
   margin-bottom: 1rem;
+  color: var(--white);
 `;
 
 const Subtitle = styled.p`
   font-size: 1.1rem;
   max-width: 600px;
   margin: 0 auto;
-  opacity: 0.8;
+  opacity: 0.9;
 `;
 
 const Breadcrumbs = styled.div`
@@ -39,10 +36,12 @@ const Breadcrumbs = styled.div`
   display: flex;
   align-items: center;
   font-size: 0.9rem;
+  color: var(--dark-gray);
 `;
 
 const BreadcrumbLink = styled(Link)`
   color: var(--dark-gray);
+  text-decoration: none;
   
   &:hover {
     color: var(--primary-color);
@@ -51,7 +50,6 @@ const BreadcrumbLink = styled(Link)`
 
 const BreadcrumbSeparator = styled.span`
   margin: 0 0.5rem;
-  color: var(--dark-gray);
 `;
 
 const BreadcrumbCurrent = styled.span`
@@ -59,43 +57,92 @@ const BreadcrumbCurrent = styled.span`
   font-weight: 500;
 `;
 
+const OrderContent = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 3rem;
+  
+  @media (max-width: 992px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
 const OrderSummary = styled.div`
   background-color: var(--white);
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow);
   padding: 2rem;
-  margin-bottom: 2rem;
+  position: sticky;
+  top: 100px; /* Учитываем высоту хедера */
+  
+  @media (max-width: 992px) {
+    position: static;
+    margin-bottom: 2rem;
+  }
 `;
 
 const SummaryTitle = styled.h2`
   font-size: 1.5rem;
   margin-bottom: 1.5rem;
   color: var(--primary-color);
+  border-bottom: 2px solid var(--secondary-color);
+  padding-bottom: 0.5rem;
 `;
 
 const SummaryItem = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 1rem 0;
-  border-bottom: 1px solid var(--light-gray);
-  
-  &:last-child {
-    border-bottom: none;
-  }
+  margin-bottom: 1rem;
 `;
 
 const SummaryLabel = styled.span`
+  display: block;
   font-weight: 500;
+  color: var(--dark-gray);
+  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
 `;
 
 const SummaryValue = styled.span`
   font-weight: 700;
-  color: var(--primary-color);
+  color: var(--text-color);
+  font-size: 1.1rem;
 `;
 
-const FormContainer = styled.div`
-  max-width: 700px;
-  margin: 0 auto;
+const SummaryPrice = styled(SummaryValue)`
+  color: var(--secondary-color);
+  font-size: 1.4rem;
+`;
+
+const OrderFormSection = styled.div`
+  background-color: var(--white);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  padding: 2rem;
+`;
+
+const Steps = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--light-gray);
+`;
+
+const Step = styled.div<{ active?: boolean }>`
+  text-align: center;
+  color: ${props => props.active ? 'var(--primary-color)' : 'var(--dark-gray)'};
+  font-weight: ${props => props.active ? '700' : '500'};
+  
+  span {
+    display: block;
+    font-size: 0.9rem;
+  }
+`;
+
+const FormTitle = styled.h2`
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--primary-color);
+  text-align: left;
 `;
 
 const LoadingMessage = styled.div`
@@ -115,19 +162,23 @@ const ErrorMessage = styled.div`
 `;
 
 const OrderPage: React.FC = () => {
-  const { productId } = useParams<OrderPageParams>();
+  const { productId } = useParams<Record<string, string | undefined>>();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const quantityParam = queryParams.get('quantity');
   
   const [product, setProduct] = useState<Product | null>(null);
-  const [quantity, setQuantity] = useState<string>(quantityParam || '');
+  const [quantity, setQuantity] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
   useEffect(() => {
     const fetchProduct = async () => {
-      if (!productId) return;
+      if (!productId) {
+        setError('Не указан ID товара.');
+        setIsLoading(false);
+        return;
+      }
       
       try {
         setIsLoading(true);
@@ -137,9 +188,11 @@ const OrderPage: React.FC = () => {
         
         if (productData) {
           setProduct(productData);
-          if (!quantityParam && productData) {
-            setQuantity(Object.keys(productData.price)[0]);
-          }
+          const priceOptions = Object.keys(productData.price);
+          // Устанавливаем тираж из URL или первый доступный
+          setQuantity(quantityParam && priceOptions.includes(decodeURIComponent(quantityParam)) 
+            ? decodeURIComponent(quantityParam) 
+            : priceOptions[0] || '');
         } else {
           setError('Товар не найден.');
         }
@@ -155,7 +208,7 @@ const OrderPage: React.FC = () => {
   }, [productId, quantityParam]);
   
   if (isLoading) {
-    return <LoadingMessage>Загрузка данных...</LoadingMessage>;
+    return <LoadingMessage>Загрузка данных заказа...</LoadingMessage>;
   }
   
   if (error || !product) {
@@ -170,7 +223,7 @@ const OrderPage: React.FC = () => {
         <div className="container">
           <Title>Оформление заказа</Title>
           <Subtitle>
-            Заполните форму ниже, и мы свяжемся с вами для уточнения деталей заказа
+            Пожалуйста, проверьте детали вашего заказа и заполните контактную информацию.
           </Subtitle>
         </div>
       </PageHeader>
@@ -182,7 +235,7 @@ const OrderPage: React.FC = () => {
             <BreadcrumbSeparator>/</BreadcrumbSeparator>
             <BreadcrumbLink to="/catalog">Каталог</BreadcrumbLink>
             <BreadcrumbSeparator>/</BreadcrumbSeparator>
-            <BreadcrumbLink to={`/catalog/${product.category.toLowerCase()}`}>
+            <BreadcrumbLink to={`/catalog/${product.category.toLowerCase().replace(/ /g, '-')}`}>
               {product.category}
             </BreadcrumbLink>
             <BreadcrumbSeparator>/</BreadcrumbSeparator>
@@ -190,28 +243,40 @@ const OrderPage: React.FC = () => {
               {product.title}
             </BreadcrumbLink>
             <BreadcrumbSeparator>/</BreadcrumbSeparator>
-            <BreadcrumbCurrent>Заказ</BreadcrumbCurrent>
+            <BreadcrumbCurrent>Оформление заказа</BreadcrumbCurrent>
           </Breadcrumbs>
           
-          <OrderSummary>
-            <SummaryTitle>Информация о заказе</SummaryTitle>
-            <SummaryItem>
-              <SummaryLabel>Товар:</SummaryLabel>
-              <SummaryValue>{product.title}</SummaryValue>
-            </SummaryItem>
-            <SummaryItem>
-              <SummaryLabel>Тираж:</SummaryLabel>
-              <SummaryValue>{quantity}</SummaryValue>
-            </SummaryItem>
-            <SummaryItem>
-              <SummaryLabel>Цена:</SummaryLabel>
-              <SummaryValue>{price} ₽</SummaryValue>
-            </SummaryItem>
-          </OrderSummary>
-          
-          <FormContainer>
-            <ContactForm productId={product.id} defaultQuantity={quantity} />
-          </FormContainer>
+          <OrderContent>
+            <OrderSummary>
+              <SummaryTitle>Ваш заказ</SummaryTitle>
+              <SummaryItem>
+                <SummaryLabel>Товар</SummaryLabel>
+                <SummaryValue>{product.title}</SummaryValue>
+              </SummaryItem>
+              <SummaryItem>
+                <SummaryLabel>Категория</SummaryLabel>
+                <SummaryValue>{product.category}</SummaryValue>
+              </SummaryItem>
+              <SummaryItem>
+                <SummaryLabel>Выбранный тираж</SummaryLabel>
+                <SummaryValue>{quantity || 'Не выбран'}</SummaryValue>
+              </SummaryItem>
+              <SummaryItem>
+                <SummaryLabel>Стоимость</SummaryLabel>
+                <SummaryPrice>{price > 0 ? `${price} ₽` : '-'}</SummaryPrice>
+              </SummaryItem>
+            </OrderSummary>
+            
+            <OrderFormSection>
+              <Steps>
+                <Step active><span>Шаг 1:</span> Детали заказа</Step>
+                <Step active><span>Шаг 2:</span> Контактная информация</Step>
+                <Step><span>Шаг 3:</span> Подтверждение</Step>
+              </Steps>
+              <FormTitle>Заполните ваши данные</FormTitle>
+              <ContactForm productId={product.id} defaultQuantity={quantity} />
+            </OrderFormSection>
+          </OrderContent>
         </PageContainer>
       </div>
     </div>

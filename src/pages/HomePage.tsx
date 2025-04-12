@@ -1,51 +1,62 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { getCategories, getCategoriesByType, getAllProducts } from '../api';
+import { getCategoriesByType, getAllProducts } from '../api';
 import { Category, Product } from '../types';
 import CategoryCard from '../components/CategoryCard';
 import ProductCard from '../components/ProductCard';
 
 const Hero = styled.section`
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/hero-bg.jpg');
-  background-size: cover;
-  background-position: center;
-  padding: 5rem 1rem;
+  background: linear-gradient(rgba(0, 86, 163, 0.6), rgba(0, 86, 163, 0.6)), url('/images/hero-bg.jpg') center/cover no-repeat;
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
   color: var(--white);
   text-align: center;
 `;
 
 const HeroTitle = styled.h1`
-  font-size: 3rem;
+  font-size: 3.5rem;
   margin-bottom: 1rem;
+  color: var(--white);
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
   
   @media (max-width: 768px) {
-    font-size: 2rem;
+    font-size: 2.5rem;
   }
 `;
 
 const HeroSubtitle = styled.p`
-  font-size: 1.2rem;
-  max-width: 600px;
-  margin: 0 auto 2rem;
+  font-size: 1.3rem;
+  max-width: 700px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.9);
   
   @media (max-width: 768px) {
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
 `;
 
 const HeroButton = styled(Link)`
-  display: inline-block;
   background-color: var(--secondary-color);
   color: var(--white);
-  padding: 0.75rem 2rem;
-  border-radius: 4px;
+  padding: 0.8rem 2.5rem;
+  border-radius: 50px;
   font-size: 1.1rem;
   font-weight: 500;
-  transition: background-color 0.3s ease;
+  transition: var(--transition);
+  text-transform: uppercase;
+  letter-spacing: 1px;
   
   &:hover {
-    background-color: rgba(255, 107, 0, 0.8);
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+    box-shadow: var(--shadow);
+    transform: translateY(-2px);
   }
 `;
 
@@ -54,24 +65,26 @@ const Section = styled.section`
 `;
 
 const SectionTitle = styled.h2`
-  font-size: 2rem;
+  font-size: 2.2rem;
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
   position: relative;
+  color: var(--primary-color);
   
   &:after {
     content: '';
     display: block;
-    width: 100px;
-    height: 3px;
+    width: 80px;
+    height: 4px;
     background-color: var(--secondary-color);
-    margin: 0.5rem auto 0;
+    margin: 1rem auto 0;
+    border-radius: 2px;
   }
 `;
 
 const SubSectionTitle = styled.h3`
-  font-size: 1.5rem;
-  margin-bottom: 2rem;
+  font-size: 1.8rem;
+  margin-bottom: 2.5rem;
   color: var(--primary-color);
   position: relative;
   
@@ -79,83 +92,77 @@ const SubSectionTitle = styled.h3`
     content: '';
     display: block;
     width: 60px;
-    height: 2px;
+    height: 3px;
     background-color: var(--secondary-color);
-    margin: 0.5rem 0 0;
+    margin: 0.8rem 0 0;
+    border-radius: 2px;
   }
 `;
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2.5rem;
   margin-bottom: 3rem;
-  
-  @media (max-width: 1024px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  @media (max-width: 480px) {
-    grid-template-columns: 1fr;
-  }
 `;
 
 const MoreLink = styled(Link)`
-  display: block;
-  text-align: center;
+  display: inline-block;
   margin-top: 2rem;
   font-weight: 500;
-  color: var(--primary-color);
+  color: var(--secondary-color);
+  text-decoration: underline;
+  transition: var(--transition);
   
   &:hover {
-    text-decoration: underline;
+    color: var(--primary-color);
+    text-decoration: none;
   }
+`;
+
+const MoreLinkContainer = styled.div`
+  text-align: center;
 `;
 
 const Features = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-  }
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2.5rem;
 `;
 
 const FeatureItem = styled.div`
   text-align: center;
-  padding: 2rem;
+  padding: 2.5rem 2rem;
   background-color: var(--white);
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
   
   &:hover {
     transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
   }
 `;
 
 const FeatureIcon = styled.div`
-  font-size: 3rem;
+  font-size: 3.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--secondary-color);
+`;
+
+const FeatureTitle = styled.h3`
+  font-size: 1.3rem;
   margin-bottom: 1rem;
   color: var(--primary-color);
 `;
 
-const FeatureTitle = styled.h3`
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
-`;
-
 const FeatureText = styled.p`
   color: var(--dark-gray);
+  font-size: 0.95rem;
 `;
 
 const ServiceCategory = styled.div`
-  margin-bottom: 4rem;
+  margin-bottom: 5rem;
 `;
 
 const HomePage: React.FC = () => {
@@ -167,15 +174,16 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setIsLoading(true);
         const [printCategoriesData, designCategoriesData, productsData] = await Promise.all([
           getCategoriesByType('Печать'),
           getCategoriesByType('Дизайн'),
           getAllProducts()
         ]);
         
-        setPrintCategories(printCategoriesData);
-        setDesignCategories(designCategoriesData);
-        // В будущем здесь можно добавить логику для отбора "featured" продуктов
+        setPrintCategories(printCategoriesData.slice(0, 4)); // Показываем только 4 категории
+        setDesignCategories(designCategoriesData.slice(0, 4)); // Показываем только 4 категории
+        // Отбираем "популярные" продукты (например, первые 4)
         setFeaturedProducts(productsData.slice(0, 4));
       } catch (error) {
         console.error('Ошибка при загрузке данных:', error);
@@ -190,12 +198,11 @@ const HomePage: React.FC = () => {
   return (
     <div>
       <Hero>
-        <HeroTitle>Студия дизайна и печати "300точек"</HeroTitle>
+        <HeroTitle>300точек</HeroTitle>
         <HeroSubtitle>
-          Мы предлагаем широкий спектр услуг по дизайну и печати рекламной продукции
-          высокого качества по доступным ценам
+          Ваш надежный партнер в мире дизайна и качественной печати. Создаем уникальные решения для вашего бизнеса.
         </HeroSubtitle>
-        <HeroButton to="/catalog">Перейти в каталог</HeroButton>
+        <HeroButton to="/catalog">Наши Услуги</HeroButton>
       </Hero>
       
       <div className="container">
@@ -203,7 +210,7 @@ const HomePage: React.FC = () => {
           <SectionTitle>Наши услуги</SectionTitle>
           
           {isLoading ? (
-            <p className="text-center">Загрузка...</p>
+            <div className="text-center">Загрузка...</div>
           ) : (
             <>
               <ServiceCategory>
@@ -224,7 +231,9 @@ const HomePage: React.FC = () => {
                 </Grid>
               </ServiceCategory>
               
-              <MoreLink to="/catalog">Посмотреть все услуги</MoreLink>
+              <MoreLinkContainer>
+                <MoreLink to="/catalog">Посмотреть все услуги</MoreLink>
+              </MoreLinkContainer>
             </>
           )}
         </Section>
@@ -233,7 +242,7 @@ const HomePage: React.FC = () => {
           <SectionTitle>Популярные товары</SectionTitle>
           
           {isLoading ? (
-            <p className="text-center">Загрузка...</p>
+            <div className="text-center">Загрузка...</div>
           ) : (
             <>
               <Grid>
@@ -241,36 +250,38 @@ const HomePage: React.FC = () => {
                   <ProductCard key={product.id} product={product} />
                 ))}
               </Grid>
-              <MoreLink to="/catalog">Посмотреть весь каталог</MoreLink>
+              <MoreLinkContainer>
+                <MoreLink to="/catalog">Перейти в каталог</MoreLink>
+              </MoreLinkContainer>
             </>
           )}
         </Section>
         
         <Section>
-          <SectionTitle>Почему мы?</SectionTitle>
+          <SectionTitle>Почему выбирают нас?</SectionTitle>
           
           <Features>
             <FeatureItem>
               <FeatureIcon>⚡</FeatureIcon>
-              <FeatureTitle>Быстрое изготовление</FeatureTitle>
+              <FeatureTitle>Быстро и точно в срок</FeatureTitle>
               <FeatureText>
-                Мы гарантируем оперативное выполнение заказов в кратчайшие сроки без потери качества
+                Гарантируем оперативное выполнение заказов в кратчайшие сроки без потери качества.
               </FeatureText>
             </FeatureItem>
             
             <FeatureItem>
-              <FeatureIcon>🛡️</FeatureIcon>
-              <FeatureTitle>Гарантия качества</FeatureTitle>
+              <FeatureIcon>💎</FeatureIcon>
+              <FeatureTitle>Высокое качество</FeatureTitle>
               <FeatureText>
-                Мы используем только современное оборудование и высококачественные материалы
+                Используем современное оборудование и лучшие материалы для безупречного результата.
               </FeatureText>
             </FeatureItem>
             
             <FeatureItem>
-              <FeatureIcon>💰</FeatureIcon>
-              <FeatureTitle>Гибкие цены</FeatureTitle>
+              <FeatureIcon>💡</FeatureIcon>
+              <FeatureTitle>Креативный подход</FeatureTitle>
               <FeatureText>
-                Индивидуальный подход к каждому клиенту и гибкая система скидок при больших тиражах
+                Разрабатываем уникальные дизайны, которые помогут вашему бренду выделиться.
               </FeatureText>
             </FeatureItem>
           </Features>
